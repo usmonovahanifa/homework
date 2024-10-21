@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    networks:
+      - compose
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 20091206
+      POSTGRES_DB: homework
+      POSTGRES_USER: postgres
+    container_name: postgres
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-docker-postgres
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    volumes:
+      - ./src:/src
+    networks:
+      - compose
+
+networks:
+  compose:
+    driver: bridge
